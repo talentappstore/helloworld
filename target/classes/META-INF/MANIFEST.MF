@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: helloworld
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: abraae
+Implementation-Vendor-Id: com.aotal.helloworld
+Build-Jdk: 1.8.0_144
+Implementation-URL: http://projects.spring.io/spring-boot/helloworld/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
