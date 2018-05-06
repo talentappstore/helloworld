@@ -8,7 +8,7 @@ git clone etc.
 
 Run locally
 --------
-Run as Spring boot app (8180)
+(e.g., import as Maven project in STS, Run as Spring boot app)
 
 Check we can see http://localhost:8180/account
 
@@ -17,39 +17,76 @@ Expose to internet
 --------------
 Expose to internet via ngrok
 
-~/Devtools/ngrok http -subdomain=helloworldapp 8180
+~/Devtools/ngrok http 8180
+
+Make note of resulting tunnel name.
 
 
 Declare app, connect to server
 -------
-Create the app
+Go to https://developer.talentappstore.com.
 
-Copy secret key into the code
+Create the app, giving it name and shortcode
 
-Update back end server
+Copy the new app's secret key back into this project (application.properties file)
 
-In TAS controller, uncomment the tazzy-secret checking
-
-ref the doc for installing an app API flow
-
-install and uninstall the app, watch the install logging messages in STS
+On the app's tazzy tab, update back end server to point to ngrok tunnel started in previous step
 
 
+Secure the app
+-----------
+In TASController.java, uncomment the tazzy-secret checking.
 
-Add the network proxy
+
+Watch incoming APIs
+-----------
+Ref the doc for installing an app http://devdocs.talentappstore.com/doc/install.html
+
+Uninstall and uninstall the app.
+
+We can see the incoming core API calls in the app's logging!
+
+
+Add the Charles web debugging proxy
 -------------
-very useful for debugging
+Very useful for debugging. No need to log API calls in your code. Install Charles proxy from internet.
 
-(ref network diagram)
+Our network will be like this, so Charles can inspect incoming and outgoing traffic to the app.
 
-start charles, add a reverse proxy inside charles
+
+````
+ |
+internet
+ |                 8181 +---------+    8180 +-----------------
+ |-(ngrok tunnel)------>|-------->|-------->|
+ |                      | charles |         |  your server
+ |                      | proxy   |         |
+ |<---------------------|<--------|<--------|
+ |                      +---------+ 8888    +-------------
+ |
+
+
+````
+
+Start charles, add a reverse proxy inside charles
 	8181 -> 127.0.0.1:8180
 
-update the ngrok tunnel to now point to 8181 
+start a new ngrok tunnel pointing to 8181
+
+~/Devtools/ngrok http 8181
+
+update the app's back end server with the new ngrok tunnel   
+
+Now all traffic in to your server is flowing through charles.
+
+ 
 
 edit application.properties to 8888
 
+Now all traffic out of your server is flowing through charles.
+
 uninstall, reinstall
+
 
 review traffic in charles
 
